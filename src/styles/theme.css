@@ -1,0 +1,14 @@
+:root {
+  --navy-900: #0a1a3f;
+  --night-deep: #050b1c;
+  --navy-800: #0d2149;
+  --navy-700: #14306b;
+  --gold: #c9a24b;
+  --gold-light: #e6c976;
+  --champagne: #f3e9d2;
+  --cream: #f7f3ea;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: system-ui, 'Segoe UI', sans-serif;
+  --font-script: 'Parisienne', cursive;
+  --maxw: 1100px;
+}

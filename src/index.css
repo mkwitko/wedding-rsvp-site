@@ -1,0 +1,185 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============ paleta céu de janeiro ============ */
+:root {
+  --navy-950: #050b1c;
+  --navy-900: #0a1a3f;
+  --navy-800: #0d2149;
+  --navy-700: #14306b;
+  --gold: #c9a24b;
+  --gold-light: #e6c976;
+  --gold-glow: #fff6df;
+  --champagne: #f3e9d2;
+  --cream: #f7f3ea;
+
+  /* nightfall: 0 (crepúsculo, hero) -> 1 (noite profunda, rodapé) */
+  --nightfall: 0;
+
+  /* shadcn semantic tokens mapeados ao tema */
+  --radius: 0.75rem;
+  --background: var(--navy-900);
+  --foreground: var(--cream);
+  --card: var(--navy-800);
+  --card-foreground: var(--cream);
+  --popover: #0c1c40;
+  --popover-foreground: var(--cream);
+  --primary: var(--gold);
+  --primary-foreground: var(--navy-950);
+  --secondary: var(--navy-700);
+  --secondary-foreground: var(--cream);
+  --muted: var(--navy-800);
+  --muted-foreground: #b9c4dc;
+  --accent: var(--navy-700);
+  --accent-foreground: var(--gold-light);
+  --destructive: #e5709a;
+  --border: color-mix(in oklab, var(--gold) 32%, transparent);
+  --input: color-mix(in oklab, var(--gold) 28%, transparent);
+  --ring: var(--gold);
+}
+
+@theme inline {
+  --color-navy-950: var(--navy-950);
+  --color-navy-900: var(--navy-900);
+  --color-navy-800: var(--navy-800);
+  --color-navy-700: var(--navy-700);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-glow: var(--gold-glow);
+  --color-champagne: var(--champagne);
+  --color-cream: var(--cream);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-script: "Parisienne", cursive;
+  --font-body: system-ui, "Segoe UI", sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    background: var(--navy-900);
+    color: var(--cream);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  img {
+    max-width: 100%;
+    display: block;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* ============ animações da assinatura (não há equivalente utilitário) ============ */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  to { background-position: -220% center; }
+}
+@keyframes bob {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 8px); }
+}
+@keyframes spin-a {
+  from { transform: rotate3d(1, 1, 0, 0deg); }
+  to { transform: rotate3d(1, 1, 0, 360deg); }
+}
+@keyframes spin-b {
+  from { transform: rotate3d(1, 0.5, 0.2, 0deg) translateX(9%); }
+  to { transform: rotate3d(1, 0.5, 0.2, 360deg) translateX(9%); }
+}
+@keyframes moon-glow {
+  0%, 100% { filter: drop-shadow(0 0 22px rgba(230, 201, 118, 0.45)); }
+  50% { filter: drop-shadow(0 0 40px rgba(230, 201, 118, 0.7)); }
+}
+@keyframes const-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; filter: drop-shadow(0 0 4px rgba(230, 201, 118, 0.9)); }
+}
+
+/* nomes do casal: brilho dourado varrendo (background-clip text, sem utilitário direto) */
+.names-shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--cream) 20%,
+    var(--gold-light) 40%,
+    var(--gold-glow) 50%,
+    var(--gold-light) 60%,
+    var(--cream) 80%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rise-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.4s both,
+    shimmer 7s linear 1.4s infinite;
+}
+
+/* céu que escurece ao rolar */
+.ceu {
+  position: relative;
+  background: color-mix(in oklab, var(--navy-900), var(--navy-950) calc(var(--nightfall) * 100%));
+}
+
+/* scroll-reveal (classe alternada por IntersectionObserver em JS) */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.revealed {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .names-shimmer {
+    animation: none;
+    color: var(--cream);
+    -webkit-text-fill-color: var(--cream);
+  }
+}

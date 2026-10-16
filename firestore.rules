@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isCasal() {
+      return request.auth != null && request.auth.uid == 'REPLACE_WITH_ADMIN_UID';
+    }
+
+    match /rsvps/{id} {
+      allow read, update, delete: if isCasal();
+      allow create: if
+        request.resource.data.keys().hasOnly(['nome','presenca','acompanhantes','recado','email','telefone','conviteId','criadoEm'])
+        && request.resource.data.nome is string
+        && request.resource.data.nome.size() >= 1
+        && request.resource.data.nome.size() <= 100
+        && request.resource.data.presenca in ['sim','nao']
+        && request.resource.data.acompanhantes is list
+        && request.resource.data.acompanhantes.size() <= 20
+        && request.resource.data.recado is string
+        && request.resource.data.recado.size() <= 500
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 200
+        && request.resource.data.telefone is string
+        && request.resource.data.telefone.size() <= 40
+        && request.resource.data.conviteId is string
+        && request.resource.data.conviteId.size() <= 40
+        && request.resource.data.criadoEm == request.time;
+    }
+
+    match /convidados/{id} {
+      allow read, write: if isCasal();
+    }
+
+    match /convites/{id} {
+      allow get: if true;
+      allow write: if isCasal();
+    }
+
+    match /config/{doc} {
+      allow read: if true;
+      allow write: if isCasal();
+    }
+  }
+}
